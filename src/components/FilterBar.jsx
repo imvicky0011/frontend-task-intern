@@ -1,6 +1,6 @@
 import React from 'react'
 import TypeFilter from './TypeFilter'
-import CategoryFilter from './CategoryList'
+import CategoryFilter from './CategoryFilter'
 
 const FilterBar = ({list, filterList, setFilterList}) => {
   return (
