@@ -7,7 +7,7 @@ const CategoryFilter = ({ list, filterList, setFilterList }) => {
 
   useEffect(() => {
     async function getTypeList() {
-      const typeResponse = await fetch("https://entryleveljobs.me/api/jobs/type");
+      const typeResponse = await fetch("https://entryleveljobs.me/api/jobs/category");
       const typeList2 = await typeResponse.json();
       setTypeList(typeList2.data);
     }
@@ -18,13 +18,14 @@ const CategoryFilter = ({ list, filterList, setFilterList }) => {
   useEffect(() => {
     if (selectedTypes.length > 0) {
       // Filter the items based on the selected types
-      const filteredList = list.filter((item) => selectedTypes.includes(item.type.name));
+      const filteredList = list.filter((item) => selectedTypes.includes(item.category?.name))
+      console.log(filteredList)
       setFilterList(filteredList);
     } else {
       // If no types are selected, show all items
       setFilterList(list);
     }
-  }, [selectedTypes, list, setFilterList]);
+  }, [selectedTypes, list, setFilterList])
 
   // Handler for category selection
   const handleCategorySelect = (category) => {
@@ -46,7 +47,7 @@ const CategoryFilter = ({ list, filterList, setFilterList }) => {
           <ListGroup>
             {typeList.map((item) => (
               <ListGroup.Item
-                key={item.typeId}
+                key={item.categoryId}
                 action
                 onClick={() => handleCategorySelect(item.name)}
                 active={selectedTypes.includes(item.name)}
