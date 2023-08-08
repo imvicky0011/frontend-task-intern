@@ -1,43 +1,47 @@
-import { useEffect, useState } from "react"
-import Table from "./components/Table.jsx"
-import FilterBar from "./components/FilterBar.jsx"
-import PaginationBasic from "./components/Pagenation.jsx"
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import './App.css'
+import { HomePage } from './components/Home.page'
+import { RQSuperHeroesPage } from './components/RQSuperHeroes.page'
+import { SuperHeroesPage } from './components/SuperHeroes.page'
+import { QueryClientProvider, QueryClient } from 'react-query'
+
+const queryClient = new QueryClient()
 
 function App() {
-  const [list, setList] = useState([])
-  const [filterList, setFilterList] = useState([])
-  const [active, setActive] = useState(1)
-
-  useEffect(() => {
-    async function getEntireList() {
-      const data = await fetch("https://entryleveljobs.me/api/jobs")
-      const jsonData = await data.json()
-      console.log(jsonData.data)
-    
-      setList(jsonData.data) 
-      setFilterList(jsonData.data)
-    }
-
-    getEntireList()
-  }, [])
 
   return (
-    <div className="container-fluid h-100">
+    <QueryClientProvider client={queryClient}>
 
-      <div className="row h-100">
-        <div className="col-3 bg-light">
-          <FilterBar list={list} filterList={filterList} setFilterList={setFilterList} />
-        </div>
-    
-        <div className="col-9">
-          <Table filterList={filterList} active = {active} />
-          <PaginationBasic active={active} setActive={setActive} length={filterList.length} />
-        </div>
-      
+    <Router>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to='/'>Home</Link>
+            </li>
+            <li>
+              <Link to='/super-heroes'>Traditional Super Heroes</Link>
+            </li>
+            <li>
+              <Link to='/rq-super-heroes'>RQ Super Heroes</Link>
+            </li>
+          </ul>
+        </nav>
+        <Routes>
+          <Route path='/super-heroes' 
+            element = { <SuperHeroesPage/> } />
+          
+          <Route path='/rq-super-heroes'
+            element={<RQSuperHeroesPage />} />
+          
+          <Route path='/'
+            element={<HomePage />} />
+
+        </Routes>
       </div>
-    
-    </div>
+    </Router>
+    </QueryClientProvider>
   )
 }
 
-export default App;
+export default App
